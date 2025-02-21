@@ -8,6 +8,7 @@ import Trip from "./components/Trip";
 import MapContainer from "./components/MapContainer";
 import Map from "./components/Map";
 import { Toaster } from "react-hot-toast";
+import TravelScoreChart from "./components/TravelScoreChart";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="dashboard" element={<DashBoard />} />
             <Route path="trip" element={<Trip/>}/>
             <Route path="map" element={<Map/>}/>
+            <Route path="best" element={<TravelScoreChart />} />
            </Route>
         </Routes>
       </Layout>

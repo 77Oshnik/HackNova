@@ -2,20 +2,19 @@ const mongoose = require('mongoose');
 
 const crimeSchema = new mongoose.Schema({
   location: {
-    type: {
-      type: String,
-      enum: ['Point'],
-      required: true
-    },
-    coordinates: {
-      type: [Number], // [longitude, latitude]
-      required: true
-    }
+    type: String,
+    required: true
+  },
+  source: {
+    type: String,
+    required: true
+  },
+  destination: {
+    type: String
   },
   crimeType: {
     type: String,
-    required: true,
-    enum: ['Theft', 'Assault', 'Burglary', 'Vandalism', 'Fraud', 'Other']
+    required: true
   },
   description: {
     type: String
@@ -29,7 +28,6 @@ const crimeSchema = new mongoose.Schema({
   },
   severity: {
     type: Number, // Scale 1-5 (1 = low, 5 = high)
-    required: true
   },
   source: {
     type: String // Source of the data (e.g., police dept, news)
@@ -39,7 +37,6 @@ const crimeSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Active', 'Resolved'],
     default: 'Active'
   },
   createdAt: {
@@ -47,7 +44,6 @@ const crimeSchema = new mongoose.Schema({
     default: Date.now
   }
 });
-crimeSchema.index({ location: '2dsphere' });
 
 const Crime = mongoose.model('Crime', crimeSchema);
 

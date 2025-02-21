@@ -6,6 +6,7 @@ const connectDB = require("./config/database");
 
 //API Routes
 const analyzeAreaRoute = require("./routes/analyzeAreaRoute");
+const { travelInfoController } = require('./controllers/travelInfoController');
 
 const app = express();
  
@@ -24,6 +25,7 @@ app.use(cors({
 
 // Routes
 app.use("/api",analyzeAreaRoute);
+app.use("/api/travelInfo",travelInfoController)
 
 // Start Server
 const PORT = process.env.PORT || 5000;
