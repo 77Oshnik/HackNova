@@ -12,7 +12,6 @@ function App() {
         {/* Wrap all pages inside Layout */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          
           {/* <Route path="dashboard" element={<Dashboard />} />
           <Route path="signin" element={<SignInPage />} /> */}
         </Route>
