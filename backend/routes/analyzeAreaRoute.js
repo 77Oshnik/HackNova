@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const analyzeController = require('../controllers/analyzeAreaController');
 
-const { analyzeArea } = require('../controllers/analyzeAreaController');
+// New endpoint for area analysis between two coordinates
+router.get('/analyzeArea/:source/:destination/:date', analyzeController.getDataFromGemini);
 
-router.get('/analyzeArea', analyzeArea);
+module.exports = router;

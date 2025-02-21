@@ -4,7 +4,6 @@ const incidentSchema = new mongoose.Schema({
   location: {
     type: {
       type: String,
-      enum: ['Point'],
       required: true
     },
     coordinates: {
@@ -15,7 +14,6 @@ const incidentSchema = new mongoose.Schema({
   incidentType: {
     type: String,
     required: true,
-    enum: ['Accident', 'Fire', 'Natural Disaster', 'Public Unrest', 'Other']
   },
   description: {
     type: String
@@ -26,7 +24,6 @@ const incidentSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Ongoing', 'Resolved'],
     default: 'Ongoing'
   },
   severity: {

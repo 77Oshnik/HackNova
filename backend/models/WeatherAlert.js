@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 
 const weatherAlertSchema = new mongoose.Schema({
   location: {
-    type: {
+    type: { 
       type: String,
-      enum: ['Point'],
       required: true
     },
     coordinates: {
@@ -15,14 +14,12 @@ const weatherAlertSchema = new mongoose.Schema({
   alertType: {
     type: String,
     required: true,
-    enum: ['Storm', 'Flood', 'Heatwave', 'Snow', 'Fog', 'Wind', 'Other']
   },
   description: {
     type: String
   },
   severity: {
     type: String,
-    enum: ['Minor', 'Moderate', 'Severe', 'Extreme'],
     required: true
   },
   startTime: {
