@@ -5,9 +5,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DashBoard from "./components/DashBoard";
 import Home from "./components/Home";
 import Trip from "./components/Trip";
+import MapContainer from "./components/MapContainer";
+import Map from "./components/Map";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
+    <>
+     <Toaster position="top-right" />
     <Router>
       <Layout> {/* Keep Layout always active */}
         <Routes>
@@ -19,10 +24,12 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="dashboard" element={<DashBoard />} />
             <Route path="trip" element={<Trip/>}/>
+            <Route path="map" element={<Map/>}/>
            </Route>
         </Routes>
       </Layout>
     </Router>
+    </>
   );
 }
 

@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 
 const ProtectedRoute = () => {
-  const { isSignedIn } = useUser();
+  const { isSignedIn } = useAuth();
+  console.log("Auth Status:", isSignedIn); // Debugging
 
   return isSignedIn ? <Outlet /> : <Navigate to="/" />;
 };

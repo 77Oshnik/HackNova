@@ -17,6 +17,9 @@ const Header = () => {
           <Link to="/trip" className="text-gray-700 hover:text-gray-900 text-lg">
             Dashboard
           </Link>
+          <Link to="/map" className="text-gray-700 hover:text-gray-900 text-lg">
+            Map
+          </Link>
 
           {isSignedIn ? (
             <SignOutButton>
