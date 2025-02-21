@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
-import { Loader2, Send } from 'lucide-react';
+import { Loader2, Send, ArrowLeft } from "lucide-react"; // Import ArrowLeft icon
 
 const Chatbot = () => {
   const [query, setQuery] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,60 +45,71 @@ const Chatbot = () => {
   };
 
   return (
-    <Card className="w-4/5 mx-auto flex flex-col" style={{ height: "calc(100vh - 64px)" }}>
-      {/* Card Header */}
-      <CardHeader className="border-b">
-        <h2 className="text-2xl font-bold">Travel Information Chatbot</h2>
-        <p className="text-sm text-muted-foreground">
-          Ask me anything about travel destinations!
-        </p>
-      </CardHeader>
+    <div className="relative">
+      {/* Back Button */}
+      <Button
+        className="fixed top-24 left-8 z-50 bg-[#c5c0c0] backdrop-blur-sm hover:bg-[#a8a1a1] text-gray-900 rounded-full p-2 shadow-lg"
+        onClick={() => navigate(-1)} // Navigate to the previous page
+      >
+        <ArrowLeft className="h-5 w-5" /> {/* Left arrow icon */}
+      </Button>
 
-      {/* Card Content (Chat Messages) */}
-      <CardContent className="flex-grow overflow-y-auto p-4" style={{ maxHeight: "400px" }}>
-        <div className="h-full">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`mb-4 ${
-                message.type === "user" ? "text-right" : "text-left"
-              }`}
-            >
+      {/* Chatbot Card */}
+      <Card className="w-4/5 mx-auto flex flex-col" style={{ height: "calc(100vh - 64px)" }}>
+        {/* Card Header */}
+        <CardHeader className="border-b">
+          <h2 className="text-2xl font-bold">Travel Information Chatbot</h2>
+          <p className="text-sm text-muted-foreground">
+            Ask me anything about travel destinations!
+          </p>
+        </CardHeader>
+
+        {/* Card Content (Chat Messages) */}
+        <CardContent className="flex-grow overflow-y-auto p-4" style={{ maxHeight: "400px" }}>
+          <div className="h-full">
+            {messages.map((message, index) => (
               <div
-                className={`inline-block p-3 rounded-lg ${
-                  message.type === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted"
+                key={index}
+                className={`mb-4 ${
+                  message.type === "user" ? "text-right" : "text-left"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <div
+                  className={`inline-block p-3 rounded-lg ${
+                    message.type === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
+            ))}
+          </div>
+        </CardContent>
 
-      {/* Card Footer (Input Area) */}
-      <CardFooter className="border-t">
-        <form onSubmit={handleSubmit} className="flex gap-2 w-full">
-          <Input
-            placeholder="Ask a question..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            disabled={loading}
-            className="flex-grow"
-          />
-          <Button type="submit" disabled={loading}>
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-            <span className="sr-only">Send message</span>
-          </Button>
-        </form>
-      </CardFooter>
-    </Card>
+        {/* Card Footer (Input Area) */}
+        <CardFooter className="border-t">
+          <form onSubmit={handleSubmit} className="flex gap-2 w-full">
+            <Input
+              placeholder="Ask a question..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              disabled={loading}
+              className="flex-grow"
+            />
+            <Button type="submit" disabled={loading}>
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+              <span className="sr-only">Send message</span>
+            </Button>
+          </form>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 

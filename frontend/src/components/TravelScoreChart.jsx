@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import ChatAssistant from "./ChatAssistant";
 
 const months = [
   "January", "February", "March", "April", "May", "June",
@@ -134,6 +135,7 @@ export function TravelScoreChart() {
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
+      <ChatAssistant />
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Travel Score Analysis</CardTitle>
         <CardDescription>
