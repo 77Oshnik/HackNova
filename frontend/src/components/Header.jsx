@@ -14,7 +14,7 @@ const Header = () => {
 
         {/* Navigation Links */}
         <div className="flex items-center gap-6">
-          <Link to="/dashboard" className="text-gray-700 hover:text-gray-900 text-lg">
+          <Link to="/trip" className="text-gray-700 hover:text-gray-900 text-lg">
             Dashboard
           </Link>
 
