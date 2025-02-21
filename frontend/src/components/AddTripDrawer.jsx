@@ -10,23 +10,89 @@ import {
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/clerk-react"; // Import Clerk authentication
+import axios from "axios";
 
-const AddTripDrawer = ({ open, onClose, onAddTrip }) => {
+const AddTripDrawer = ({ open, onClose }) => {
+  const { user } = useUser(); // Get logged-in user details
   const [date, setDate] = useState();
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
+  const [loading, setLoading] = useState(true);
+  const[error,setError]=useState("")
+  const [trips, setTrips] = useState([]);
 
-  const handleSubmit = (e) => {
+
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Ensure proper URL string template syntax
+        console.log(user.id);
+        
+        const response = await axios.get(`http://localhost:5000/api/fetchtrip/${user.id}`);
+        console.log(response.data)
+        setTrips(response.data);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching trips:", error);
+        setError(error.message);
+        
+        // If it's a 404, set empty trips array instead of keeping stale data
+        if (error.response?.status === 404) {
+          setTrips([]);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrips();
+  }, [user]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
+
     if (date && source && destination) {
-      onAddTrip({ date, source, destination });
-      setDate(undefined);
-      setSource("");
-      setDestination("");
-      onClose();
+      const formattedDate = format(date, "yyyy-MM-dd"); // Format date for API
+      const userId = user.id; // Get user ID from Clerk
+        console.log(userId);
+        
+      const apiUrl = `http://localhost:5000/api/analyzeArea/${userId}/${source}/${destination}/${formattedDate}`;
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch trip analysis");
+        }
+
+        const data = await response.json();
+        console.log("Trip Analysis Data:", data);
+
+        // Clear inputs
+        setDate(undefined);
+        setSource("");
+        setDestination("");
+        onClose();
+      } catch (error) {
+        console.error("Error fetching trip analysis:", error);
+      }
     }
   };
 

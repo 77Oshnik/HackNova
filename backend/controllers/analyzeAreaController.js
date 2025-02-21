@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const RouteOccurrence = require('../models/RouteOccurence'); // Missing import added
+const  Trip  = require('../models/Trip');
 
 const analyzeAreaController = (() => {
     // API key validation and initialization
@@ -150,6 +151,8 @@ Return ONLY a JSON array. No other text. No backticks. No "json" prefix. Adhere 
             }))
         };
 
+        
+
         const newRouteOccurrence = new RouteOccurrence({
             source: source,
             destination: destination,
@@ -159,13 +162,33 @@ Return ONLY a JSON array. No other text. No backticks. No "json" prefix. Adhere 
         return await newRouteOccurrence.save();
     };
 
+    const saveTripDetails = async (userId, source, destination, date) => {
+        console.log(userId);
+        
+        const trip = {
+            userId,
+            source,
+            destination,
+            date: new Date(date)
+        };
+    
+        try {
+            const newTrip = new Trip(trip);
+            await newTrip.save();
+            return { success: true, message: "Trip saved successfully", trip: newTrip };
+        } catch (error) {
+            return { success: false, message: "Error saving trip", error: error.message };
+        }
+    };
+    
+
     // --- Main Controller Function ---
     const getDataFromGemini = async (req, res) => {
         try {
             // Verify API key is available before proceeding
             validateApiKey();
-            const { source, destination, date } = req.params;
-            const userId = req.user?.id || '657f4f204c7c7b894def2c89'; // Default user ID
+            const { userId, source, destination, date } = req.params;
+            // const userId = req.userId // Default user ID
 
             // Input Validation
             if (!source || !destination || !date) {
@@ -196,8 +219,10 @@ Return ONLY a JSON array. No other text. No backticks. No "json" prefix. Adhere 
             
             // Save data using the correct function
             const savedRouteOccurrence = await saveRouteOccurrences(source, destination, date, crimeData, incidentData, weatherData);
+            const savedTripOccurrence = await saveTripDetails(userId, source, destination, date);
 
-            res.status(200).json(savedRouteOccurrence);
+
+            res.status(200).json({ savedRouteOccurrence, savedTripOccurrence });
         } catch (error) {
             console.error('Error in getDataFromGemini:', error);
             
