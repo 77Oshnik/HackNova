@@ -9,7 +9,6 @@ const userRouteSchema = new mongoose.Schema({
   route: [{
     type: {
       type: String,
-      enum: ['Point'],
       required: true
     },
     coordinates: {
@@ -22,7 +21,6 @@ const userRouteSchema = new mongoose.Schema({
   },
   travelMode: {
     type: String,
-    enum: ['Car', 'Walking', 'Bicycle', 'Public Transport'],
     required: true
   },
   advisory: [{
@@ -31,7 +29,6 @@ const userRouteSchema = new mongoose.Schema({
     },
     relatedTo: {
       type: String,
-      enum: ['Crime', 'Weather', 'Incident']
     },
     severity: {
       type: Number
