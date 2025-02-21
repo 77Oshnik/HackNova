@@ -1,118 +1,125 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import WorldMapDemo from "@/components/WorldMapDemo"; // Import the WorldMap component
+import WorldMapDemo from "@/components/WorldMapDemo";
+import { Shield, Navigation, Users, Cloud, Map } from "lucide-react";
 
 const Home = () => {
-  // Example dots for the WorldMap
   const dots = [
     {
-      start: { lat: 37.7749, lng: -122.4194 }, // San Francisco
-      end: { lat: 34.0522, lng: -118.2437 }, // Los Angeles
+      start: { lat: 37.7749, lng: -122.4194 },
+      end: { lat: 34.0522, lng: -118.2437 },
     },
     {
-      start: { lat: 40.7128, lng: -74.006 }, // New York
-      end: { lat: 51.5074, lng: -0.1278 }, // London
+      start: { lat: 40.7128, lng: -74.006 },
+      end: { lat: 51.5074, lng: -0.1278 },
     },
   ];
 
+  const features = [
+    {
+      title: "Real-Time Risk Analysis",
+      description: "Analyze crime rates, live weather alerts, and local incidents to ensure your safety.",
+      icon: Shield
+    },
+    {
+      title: "AI-Driven Route Safety",
+      description: "Get safety scores for routes based on historical and real-time data.",
+      icon: Navigation
+    },
+    {
+      title: "Crowdsourced Safety Reports",
+      description: "Verified reports using blockchain for credibility and transparency.",
+      icon: Users
+    },
+    {
+      title: "Travel Risk Forecasting",
+      description: "AI-powered predictions for potential hazards and risks.",
+      icon: Cloud
+    },
+    {
+      title: "Alternate Routes & Safe Zones",
+      description: "Suggestions for safer routes and zones based on risk factors.",
+      icon: Map
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-  {/* Hero Section */}
-  <div className="text-center py-0 bg-gradient-to-b from-blue-50 to-white">
-    <div className="flex flex-col items-center justify-center">
-      {/* WorldMap Component */}
-      <div className="w-full h-[400px] mb-8">
+    <div className="relative min-h-screen ">
+      {/* Full-screen map background */}
+      <div className="fixed inset-0 z-0 pt-12">
         <WorldMapDemo dots={dots} lineColor="#3b82f6" />
       </div>
 
-      <h1 className="text-4xl font-bold text-gray-800 mt-8 mb-4">
-        Your Personalized Travel Safety Guide
-      </h1>
-      <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-        Stay safe on the go with real-time location-based security insights, AI-driven route scoring, and crowdsourced safety reports.
-      </p>
-    </div>
-  </div>
+      {/* Content overlay */}
+      <div className="relative z-10">
+        {/* Hero Section with transparent background */}
+        <div className="min-h-screen flex flex-col items-center justify-center bg-transparent  px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-4xl mx-auto">
+           
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Get Started Now
+            </Button>
+          </div>
+        </div>
 
-  {/* Features Section */}
-  <div className="py-16 bg-white">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-        Key Features
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {/* Feature 1 */}
-        <Card className="hover:shadow-lg transition-shadow duration-300">
-          <CardHeader>
-            <CardTitle>Real-Time Risk Analysis</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>
-              Analyze crime rates, live weather alerts, and local incidents to ensure your safety.
-            </CardDescription>
-          </CardContent>
-        </Card>
+        {/* Features Section with glass effect */}
+        <div className="bg-white/90 backdrop-blur-sm py-16 sm:py-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 mb-12 sm:mb-16">
+              Key Features
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+              {features.map((feature, index) => (
+                <Card 
+                  key={index} 
+                  className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white/80 backdrop-blur-sm"
+                >
+                  <CardHeader className="p-6">
+                    <div className="mb-4">
+                      <feature.icon className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <CardTitle className="text-xl font-bold text-gray-900">
+                      {feature.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6 pt-0">
+                    <CardDescription className="text-base text-gray-600">
+                      {feature.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
 
-        {/* Feature 2 */}
-        <Card className="hover:shadow-lg transition-shadow duration-300">
-          <CardHeader>
-            <CardTitle>AI-Driven Route Safety</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>
-              Get safety scores for routes based on historical and real-time data.
-            </CardDescription>
-          </CardContent>
-        </Card>
+        {/* CTA Section with glass effect */}
+        <div className="bg-black/30 backdrop-blur-sm py-16 sm:py-20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+              Ready to Travel Safely?
+            </h2>
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Get Started Now
+            </Button>
+          </div>
+        </div>
 
-        {/* Feature 3 */}
-        <Card className="hover:shadow-lg transition-shadow duration-300">
-          <CardHeader>
-            <CardTitle>Crowdsourced Safety Reports</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>
-              Verified reports using blockchain for credibility and transparency.
-            </CardDescription>
-          </CardContent>
-        </Card>
-
-        {/* Feature 4 */}
-        <Card className="hover:shadow-lg transition-shadow duration-300">
-          <CardHeader>
-            <CardTitle>Travel Risk Forecasting</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>
-              AI-powered predictions for potential hazards and risks.
-            </CardDescription>
-          </CardContent>
-        </Card>
-
-        {/* Feature 5 */}
-        <Card className="hover:shadow-lg transition-shadow duration-300">
-          <CardHeader>
-            <CardTitle>Alternate Routes & Safe Zones</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>
-              Suggestions for safer routes and zones based on risk factors.
-            </CardDescription>
-          </CardContent>
-        </Card>
+        {/* Footer with glass effect */}
+        <footer className="bg-white/90 backdrop-blur-sm border-t border-gray-200">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="text-center text-gray-600">
+              &copy; {new Date().getFullYear()} TravelSafe. All rights reserved.
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
-  </div>
-
-  {/* Footer */}
-  <div className="bg-white border-t border-gray-200 py-6">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
-      &copy; {new Date().getFullYear()} TravelSafe. All rights reserved.
-    </div>
-  </div>
-</div>
-
   );
 };
 
