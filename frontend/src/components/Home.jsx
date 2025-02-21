@@ -95,20 +95,20 @@ const Home = () => {
             </div>
           </div>
         </div>
+{/* CTA Section with glass effect */}
+<div className="bg-black/30 backdrop-blur-sm py-44 sm:py-38">
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+      Ready to Travel Safely?
+    </h2>
+    <Button 
+      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+    >
+      Get Started Now
+    </Button>
+  </div>
+</div>
 
-        {/* CTA Section with glass effect */}
-        <div className="bg-black/30 backdrop-blur-sm py-16 sm:py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-              Ready to Travel Safely?
-            </h2>
-            <Button 
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Get Started Now
-            </Button>
-          </div>
-        </div>
 
         {/* Footer with glass effect */}
         <footer className="bg-white/90 backdrop-blur-sm border-t border-gray-200">
