@@ -1,15 +1,12 @@
 import Header from "./Header";
-import { Outlet } from "react-router-dom";
 
-const Layout = () => {
+const Layout = ({ children }) => {
   return (
     <>
       <Header />
-      <div className="mt-16"> {/* Add margin to avoid navbar overlap */}
-        <Outlet /> {/* This renders the matched route */}
-      </div>
+      <div className="mt-16">{children}</div> {/* Render the routed components */}
     </>
   );
 };
 
-export default Layout;
+export default Layout

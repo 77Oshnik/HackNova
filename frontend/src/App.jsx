@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashBoard from "./components/DashBoard";
 import Home from "./components/Home";
+import Trip from "./components/Trip";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
           {/* Protected Routes - Only logged-in users can access */}
           <Route element={<ProtectedRoute />}>
             <Route path="dashboard" element={<DashBoard />} />
-          </Route>
+            <Route path="trip" element={<Trip/>}/>
+           </Route>
         </Routes>
       </Layout>
     </Router>
