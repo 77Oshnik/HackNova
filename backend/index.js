@@ -4,6 +4,9 @@ const cors = require("cors");
 const morgan = require("morgan");
 const connectDB = require("./config/database");
 
+//API Routes
+const analyzeAreaRoute = require("./routes/analyzeAreaRoute");
+
 const app = express();
  
 // Connect Database
@@ -12,10 +15,15 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL, // Use dynamic origin
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
+}));
 // app.use(morgan("dev"));
 
 // Routes
-// app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api",analyzeAreaRoute);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
