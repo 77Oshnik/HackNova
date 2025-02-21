@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DashBoard from "./components/DashBoard";
 import Home from "./components/Home";
 import Trip from "./components/Trip";
+import TravelScoreChart from "./components/TravelScoreChart";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="dashboard" element={<DashBoard />} />
             <Route path="trip" element={<Trip/>}/>
+            <Route path="best" element={<TravelScoreChart />} />
            </Route>
         </Routes>
       </Layout>
