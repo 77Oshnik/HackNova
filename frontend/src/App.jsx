@@ -1,17 +1,23 @@
-
-import './App.css'
-import { Button } from './components/ui/button'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./components/Home";
+// import Home from "./pages/Home";
+// import Dashboard from "./pages/Dashboard";
+// import SignInPage from "./pages/SignInPage";
 
 function App() {
-
-
   return (
-    <>
-      <h1 className='text-2xl text-center'>Hello There!</h1>
-      <Button>Click me</Button>
-      <Button>fuck off!!</Button>
-    </>
-  )
+    <Router>
+      <Routes>
+        {/* Wrap all pages inside Layout */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          {/* <Route path="dashboard" element={<Dashboard />} />
+          <Route path="signin" element={<SignInPage />} /> */}
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
