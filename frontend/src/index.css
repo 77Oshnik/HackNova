@@ -73,3 +73,21 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Thin Scrollbar */
+::-webkit-scrollbar {
+  width: 6px; /* Adjust width for thin look */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Optional: Can be any color */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 100, 100, 0.5); /* Semi-transparent dark */
+  border-radius: 10px; /* Smooth edges */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 100, 100, 0.7); /* Darker on hover */
+}

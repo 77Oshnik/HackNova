@@ -21,14 +21,14 @@ const months = [
 const generatePrompt = (start, end) => {
   return `As a travel expert, analyze traveling from ${start} to ${end}. Provide 3 sets of data separated by '###':
 
-1. With respect to ${end}, which month is best to travel cost-wise, festival-wise, climate-wise, etc.? Rate each month for travel suitability (0-100). Respond with just 12 numbers separated by commas.
+1. With respect to ${end}, which month is best to travel cost-wise, festival-wise, climate-wise, etc.? Rate each month for travel suitability (0-100) use your knowledge to figure out which month is how much suitable. Respond with just 12 numbers separated by commas.
 
-2. Estimate tourist demographics from last year. Provide realistic and non-rounded numbers that do not look suspicious. Respond with just 2 numbers separated by commas: Indian tourists, Foreign tourists.
+2. Estimate tourist demographics from last year. strictly Provide realistic and non-rounded numbers that do not look suspicious if ${end} is a city the value will be high if its a state the value will be a bit higher. Respond with just 2 numbers separated by commas: Indian tourists, Foreign tourists.
 
-3. Estimate visitor demographics by category. Provide realistic and non-rounded numbers that do not look suspicious. Respond with just 3 numbers separated by commas: Children, Male adults, Female adults.
+3. Estimate visitor demographics by category.strictly Provide realistic and non-rounded numbers that do not look suspicious if ${end} is a city the value will be high if its a state the value will be a bit higher. Respond with just 3 numbers separated by commas: Children, Male adults, Female adults.
 
 Format: [monthly scores] ### [tourist types] ### [visitor categories]
-Example: 70,65,80,85,90,75,60,65,70,80,85,75 ### 15234,8123 ### 5123,10234,8123`;
+Example: 42,78,65,90,83,67,96,72,88,49,70,61 ### 15234,8123 ### 5123,10234,8123`;
 };
 
 export function TravelScoreChart() {
@@ -172,8 +172,9 @@ export function TravelScoreChart() {
         </div>
 
         {scores.length > 0 && (
-          <>
-            <div className="h-[300px] w-full mt-6">
+          <div className="flex flex-col gap-6">
+            {/* Bar Chart at the Top */}
+            <div className="h-[300px] w-full">
               <BarChart
                 width={800}
                 height={300}
@@ -194,7 +195,9 @@ export function TravelScoreChart() {
               </BarChart>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            {/* Pie Charts Below */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Tourist Types Pie Chart */}
               <div className="h-[300px] flex items-center justify-center">
                 <PieChart width={300} height={300}>
                   <Pie
@@ -237,6 +240,7 @@ export function TravelScoreChart() {
                 </PieChart>
               </div>
 
+              {/* Visitor Types Pie Chart */}
               <div className="h-[300px] flex items-center justify-center">
                 <PieChart width={300} height={300}>
                   <Pie
@@ -262,7 +266,7 @@ export function TravelScoreChart() {
                             y={viewBox.cy}
                             className="fill-foreground text-xl font-bold"
                           >
-                            
+                            {totalVisitors.toLocaleString()}
                           </tspan>
                           <tspan
                             x={viewBox.cx}
@@ -279,7 +283,7 @@ export function TravelScoreChart() {
                 </PieChart>
               </div>
             </div>
-          </>
+          </div>
         )}
       </CardContent>
       {bestMonth && (
