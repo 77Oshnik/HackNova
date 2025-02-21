@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import WorldMapDemo from "@/components/WorldMapDemo";
 import { Shield, Navigation, Users, Cloud, Map } from "lucide-react";
+import { Link } from "react-router-dom"; // Use `next/link` if using Next.js
 
 const Home = () => {
   const dots = [
@@ -20,32 +21,32 @@ const Home = () => {
     {
       title: "Real-Time Risk Analysis",
       description: "Analyze crime rates, live weather alerts, and local incidents to ensure your safety.",
-      icon: Shield
+      icon: Shield,
     },
     {
       title: "AI-Driven Route Safety",
       description: "Get safety scores for routes based on historical and real-time data.",
-      icon: Navigation
+      icon: Navigation,
     },
     {
       title: "Crowdsourced Safety Reports",
       description: "Verified reports using blockchain for credibility and transparency.",
-      icon: Users
+      icon: Users,
     },
     {
       title: "Travel Risk Forecasting",
       description: "AI-powered predictions for potential hazards and risks.",
-      icon: Cloud
+      icon: Cloud,
     },
     {
       title: "Alternate Routes & Safe Zones",
       description: "Suggestions for safer routes and zones based on risk factors.",
-      icon: Map
-    }
+      icon: Map,
+    },
   ];
 
   return (
-    <div className="relative min-h-screen ">
+    <div className="relative min-h-screen">
       {/* Full-screen map background */}
       <div className="fixed inset-0 z-0 pt-12">
         <WorldMapDemo dots={dots} lineColor="#3b82f6" />
@@ -54,12 +55,9 @@ const Home = () => {
       {/* Content overlay */}
       <div className="relative z-10">
         {/* Hero Section with transparent background */}
-        <div className="min-h-screen flex flex-col items-center justify-center bg-transparent  px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-transparent px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-           
-            <Button 
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-            >
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
               Get Started Now
             </Button>
           </div>
@@ -73,8 +71,8 @@ const Home = () => {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
               {features.map((feature, index) => (
-                <Card 
-                  key={index} 
+                <Card
+                  key={index}
                   className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl bg-white/80 backdrop-blur-sm"
                 >
                   <CardHeader className="p-6">
@@ -95,20 +93,18 @@ const Home = () => {
             </div>
           </div>
         </div>
-{/* CTA Section with glass effect */}
-<div className="bg-black/30 backdrop-blur-sm py-44 sm:py-38">
-  <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-      Ready to Travel Safely?
-    </h2>
-    <Button 
-      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-    >
-      Get Started Now
-    </Button>
-  </div>
-</div>
 
+        {/* CTA Section with glass effect */}
+        <div className="bg-black/30 backdrop-blur-sm py-44 sm:py-38">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+              Ready to Travel Safely?
+            </h2>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+              Get Started Now
+            </Button>
+          </div>
+        </div>
 
         {/* Footer with glass effect */}
         <footer className="bg-white/90 backdrop-blur-sm border-t border-gray-200">
@@ -118,6 +114,15 @@ const Home = () => {
             </div>
           </div>
         </footer>
+      </div>
+
+      {/* Fixed Button in Bottom Right Corner */}
+      <div className="fixed bottom-8 right-8 z-50">
+        <Link to="/bot"> {/* Use `href="/bot"` if using Next.js */}
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+            AI Tour Guide
+          </Button>
+        </Link>
       </div>
     </div>
   );

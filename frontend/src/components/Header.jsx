@@ -30,6 +30,10 @@ const Header = () => {
             Map
           </Link>
 
+          <Link to="/forecast" className="text-gray-700 hover:text-gray-900 text-lg">
+            Forecast
+          </Link>
+
           {isSignedIn ? (
             <SignOutButton>
               <button className="bg-red-500 text-white px-5 py-2 rounded-lg shadow-md hover:bg-red-600 transition">
