@@ -9,7 +9,6 @@ export default function WorldMapDemo() {
       <div className="relative z-10 pt-20 mb-36">
         <div className="max-w-7xl mx-auto text-center px-4">
           <p className="font-bold text-xl md:text-4xl mb-4">
-            Remote{" "}
             <span className="text-neutral-400">
               {"Connectivity".split("").map((word, idx) => (
                 <motion.span
@@ -24,11 +23,7 @@ export default function WorldMapDemo() {
             </span>
           </p>
           <div className="max-w-2xl mx-auto">
-            <p className="text-sm md:text-lg text-neutral-500 mb-8">
-              Break free from traditional boundaries. Work from anywhere, at the
-              comfort of your own studio apartment. Perfect for Nomads and
-              Travellers.
-            </p>
+           
           </div>
         </div>
       </div>
@@ -67,6 +62,12 @@ export default function WorldMapDemo() {
             {
               start: { lat: 28.6139, lng: 77.209 }, // New Delhi
               end: { lat: -1.2921, lng: 36.8219 }, // Nairobi
+            },{
+              start: { lat: 55.7558, lng: 37.6173 }, // Moscow, Russia
+              end: { lat: 19.4326, lng: -99.1332 }, // Mexico City, Mexico
+            },{
+              start:  { lat: -33.8688, lng: 151.2093 }, // Mumbai, India
+              end: { lat: 19.0760, lng: 72.8777 }, // Vladivostok, Russia
             },
           ]} />
       </div>
