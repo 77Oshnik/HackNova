@@ -19,7 +19,7 @@ function buildForecastPrompt(data) {
 
     1. RISK ASSESSMENT
     - Weather Forecast: Detailed weather conditions expected during travel period(use past years data and predict the forecasts)
-    - Safety Risks: Analyze potential threats, severity levels (Low/Medium/High)
+    - Safety Risks: Analyze potential threats, severity levels (Low/Medium/High), consider every perspective(use past records of incidents, crimes, and harsh climate and predict the forecast)
     - Recent Incidents: Any relevant historical events or patterns in the region
     - Infrastructure Status: Current condition of roads/rails/airports based on mode
 
@@ -39,7 +39,7 @@ function buildForecastPrompt(data) {
     - Mode-Specific Tips: Focused on ${data.modeOfTravel}
     - Suggested-Mode Alternatives: Other modes of transportation(which are best for the given journey, according to points of interest, weather forecast, etc.)
     - Safety Precautions: Specific to route and conditions
-    - Emergency Contacts: Suggested emergency services to note
+    - Emergency Contacts: Suggested emergency services to note(give emergency contact numbers of the emergency services of the)
     - Preparation Checklist: Essential items and preparations
 
     5. SPECIAL CONSIDERATIONS
@@ -74,11 +74,6 @@ function formatResponse(text) {
     return text;
 }
 
-function logFormattedResponse(response) {
-    console.log('\n========== FORECAST RESPONSE ==========\n');
-    console.log(response);
-    console.log('\n======================================\n');
-}
 
 function parseResponse(rawResponse) {
     try {
@@ -180,7 +175,6 @@ const generateForecast = async (req, res) => {
 
         // Format and log the response
         const formattedResponse = formatResponse(rawResponse);
-        logFormattedResponse(formattedResponse);
 
         // Parse the response into structured sections
         const parsedResponse = parseResponse(rawResponse);
