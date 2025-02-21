@@ -10,6 +10,7 @@ import Map from "./components/Map";
 import { Toaster } from "react-hot-toast";
 import TravelScoreChart from "./components/TravelScoreChart";
 import Chatbot from "./components/Chatbot";
+import TravelForecast from "./components/TravelForecast";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="map" element={<Map/>}/>
             <Route path="best" element={<TravelScoreChart />} />
             <Route path="bot" element={<Chatbot />} />
+            <Route path="forecast" element={<TravelForecast />} />
            </Route>
         </Routes>
       </Layout>
