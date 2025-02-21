@@ -1,26 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import Home from "./components/Home";
+
 import ProtectedRoute from "./components/ProtectedRoute";
-// import Home from "./pages/Home";
-// import Dashboard from "./pages/Dashboard";
-// import SignInPage from "./pages/SignInPage";
+import DashBoard from "./components/DashBoard";
+import Home from "./components/Home";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* Wrap all pages inside Layout */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          {/* <Route path="dashboard" element={<Dashboard />} />
-          <Route path="signin" element={<SignInPage />} /> */}
-        </Route>
+      <Layout> {/* Keep Layout always active */}
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          {/* <Route path="signin" element={<SignInPage />} /> */}
 
-        <Route element={<ProtectedRoute />}>
-            <Route path="dashboard"  />
+          {/* Protected Routes - Only logged-in users can access */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="dashboard" element={<DashBoard />} />
           </Route>
-      </Routes>
+        </Routes>
+      </Layout>
     </Router>
   );
 }
