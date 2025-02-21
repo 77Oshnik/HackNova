@@ -19,6 +19,15 @@ const months = [
   "July", "August", "September", "October", "November", "December"
 ];
 
+// Define colors for pie charts
+const pieChartColors = [
+  "#FF6384", // Red
+  "#36A2EB", // Blue
+  "#FFCE56", // Yellow
+  "#4BC0C0", // Teal
+  "#9966FF", // Purple
+];
+
 const generatePrompt = (start, end) => {
   return `As a travel expert, analyze traveling from ${start} to ${end}. Provide 3 sets of data separated by '###':
 
@@ -52,16 +61,16 @@ export function TravelScoreChart() {
     // Process tourist types
     const [indian, foreign] = tourists.split(',').map(num => parseInt(num.trim()));
     const touristData = [
-      { name: "Indian Tourists", value: indian, fill: "hsl(var(--chart-1))" },
-      { name: "Foreign Tourists", value: foreign, fill: "hsl(var(--chart-2))" }
+      { name: "Indian Tourists", value: indian, fill: pieChartColors[0] },
+      { name: "Foreign Tourists", value: foreign, fill: pieChartColors[1] }
     ];
 
     // Process visitor types
     const [children, male, female] = visitors.split(',').map(num => parseInt(num.trim()));
     const visitorData = [
-      { name: "Children", value: children, fill: "hsl(var(--chart-3))" },
-      { name: "Male Adults", value: male, fill: "hsl(var(--chart-4))" },
-      { name: "Female Adults", value: female, fill: "hsl(var(--chart-5))" }
+      { name: "Children", value: children, fill: pieChartColors[2] },
+      { name: "Male Adults", value: male, fill: pieChartColors[3] },
+      { name: "Female Adults", value: female, fill: pieChartColors[4] }
     ];
 
     return { monthScores, touristData, visitorData };
