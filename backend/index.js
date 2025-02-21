@@ -5,9 +5,9 @@ const morgan = require("morgan");
 const connectDB = require("./config/database");
 
 const app = express();
-
+ 
 // Connect Database
-// connectDB();
+connectDB();
 
 // Middleware
 app.use(express.json());
