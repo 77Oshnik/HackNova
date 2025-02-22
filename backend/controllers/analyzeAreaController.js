@@ -173,6 +173,21 @@ Return ONLY a JSON array. No other text. No backticks. No "json" prefix. Adhere 
         };
     
         try {
+            // Check for existing trip with same source, destination, and date for the user
+            const existingTrip = await Trip.findOne({ 
+                userId, 
+                source, 
+                destination, 
+                date: tripDate 
+            });
+    
+            if (existingTrip) {
+                return { 
+                    success: false, 
+                    message: "Trip with same source, destination, and date already exists" 
+                };
+            }
+    
             const newTrip = new Trip(trip);
             await newTrip.save();
             return { success: true, message: "Trip saved successfully", trip: newTrip };
