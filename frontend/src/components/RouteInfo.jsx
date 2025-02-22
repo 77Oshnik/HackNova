@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, AlertTriangle } from 'lucide-react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const formatDistance = (distance) => `${(distance / 1000).toFixed(2)} km`;
 
@@ -9,8 +10,16 @@ const formatTime = (time) => {
     return hours > 0 ? `${hours} hr ${minutes} min` : `${minutes} min`;
 };
 
-const RouteInfo = ({ routes = [], selectedRouteId, onRouteSelect }) => {
+
+const RouteInfo = ({ routes, selectedRouteId, onRouteSelect, source, destination ,date }) => {
   if (!Array.isArray(routes) || routes.length === 0) return null;
+  const Navigate = useNavigate();
+
+
+  const handleNavigateToTravelScore = () => {
+    Navigate(`/best?source=${encodeURIComponent(source)}&destination=${encodeURIComponent(destination)}&date=${date}`);
+  };
+  
 
   return (
     <div className="mt-6 space-y-3">
@@ -69,7 +78,14 @@ const RouteInfo = ({ routes = [], selectedRouteId, onRouteSelect }) => {
           )}
         </div>
       ))}
+      <button
+        onClick={handleNavigateToTravelScore}
+        className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md w-full"
+      >
+        Check Travel Score
+      </button>
     </div>
+    
   );
 };
 

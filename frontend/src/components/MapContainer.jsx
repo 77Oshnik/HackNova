@@ -23,6 +23,37 @@ const MapContainer = ({ routes, selectedRouteId, onMapReady }) => {
         position: 'bottomright',
       }).addTo(map);
 
+      // Add legend
+      const legend = L.control({ position: 'bottomleft' });
+      legend.onAdd = function() {
+        const div = L.DomUtil.create('div', 'legend bg-white p-2 rounded shadow-lg');
+        div.innerHTML = `
+          <h4 class="font-semibold mb-2">Safety Scores</h4>
+          <div class="flex items-center mb-1">
+            <div class="w-4 h-4 rounded mr-2" style="background: #22c55e"></div>
+            <span>Very Safe (80-100%)</span>
+          </div>
+          <div class="flex items-center mb-1">
+            <div class="w-4 h-4 rounded mr-2" style="background: #84cc16"></div>
+            <span>Safe (60-79%)</span>
+          </div>
+          <div class="flex items-center mb-1">
+            <div class="w-4 h-4 rounded mr-2" style="background: #eab308"></div>
+            <span>Moderate (40-59%)</span>
+          </div>
+          <div class="flex items-center mb-1">
+            <div class="w-4 h-4 rounded mr-2" style="background: #f97316"></div>
+            <span>Unsafe (20-39%)</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-4 h-4 rounded mr-2" style="background: #ef4444"></div>
+            <span>Very Unsafe (0-19%)</span>
+          </div>
+        `;
+        return div;
+      };
+      legend.addTo(map);
+
       mapRef.current = map;
       onMapReady(map);
     }
@@ -53,13 +84,17 @@ const MapContainer = ({ routes, selectedRouteId, onMapReady }) => {
         lineJoin: 'round',
       }).addTo(mapRef.current);
 
-      // Add hover effect and tooltip
+      // Add hover effect and tooltip with safety score
       polyline
         .on('mouseover', () => {
           polyline.setStyle({ weight: 8, opacity: 1 });
           polyline.bindTooltip(
-            `Safety Score: ${route.safetyScore}%`,
-            { permanent: false, direction: 'top' }
+            `<div class="bg-white p-2 rounded shadow">
+              <div class="font-semibold">Safety Score: ${route.safetyScore}%</div>
+              <div>Distance: ${(route.distance / 1000).toFixed(1)} km</div>
+              <div>Time: ${Math.round(route.time / 60)} mins</div>
+            </div>`,
+            { permanent: false, direction: 'top', className: 'custom-tooltip' }
           ).openTooltip();
         })
         .on('mouseout', () => {
