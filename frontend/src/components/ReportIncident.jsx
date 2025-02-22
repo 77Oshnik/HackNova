@@ -43,6 +43,8 @@ const ReportIncident = () => {
         `http://localhost:5000/api/incidents/nearby?latitude=${latitude}&longitude=${longitude}&radius=1`
       );
       setNearbyIncidents(response.data);
+      console.log(response.data);
+      
     } catch (error) {
       console.error("Error fetching nearby incidents:", error);
       setError("Failed to fetch nearby incidents.");
@@ -208,212 +210,230 @@ const ReportIncident = () => {
   });
 
   return (
-    <div className="p-6 bg-gray-50 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">Report an Incident</h2>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-
-      {/* Report Incident Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Description</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border rounded-md"
-            rows="4"
-            placeholder="Describe the incident..."
-            required
-          />
+    <div className="max-w-3xl mx-auto py-8 px-4">
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-600 text-sm">{error}</p>
         </div>
+      )}
 
-        {/* Image Upload */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Upload Images (Max 5)</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageUpload}
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
+      {/* Report Form Card */}
+      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Report an Incident</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              rows="4"
+              placeholder="Describe the incident..."
+              required
+            />
+          </div>
 
-        {/* Location */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Location</label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Upload Images</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageUpload}
+              className="w-full p-2 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+            <button
+              type="button"
+              onClick={getLocation}
+              className="inline-flex items-center px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+            >
+              Get Current Location
+            </button>
+            {location.latitude && location.longitude && (
+              <p className="mt-2 text-sm text-gray-500">
+                Latitude: {location.latitude}, Longitude: {location.longitude}
+              </p>
+            )}
+          </div>
+
           <button
-            type="button"
-            onClick={getLocation}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            type="submit"
+            className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors"
           >
-            Get Current Location
+            Submit Report
           </button>
-          {location.latitude && location.longitude && (
-            <p className="mt-2 text-sm text-gray-600">
-              Latitude: {location.latitude}, Longitude: {location.longitude}
-            </p>
-          )}
-        </div>
+        </form>
+      </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 rounded-md"
-        >
-          Report Incident
-        </button>
-      </form>
-
-      {/* Display Nearby Incidents */}
-      <div className="mt-8">
-        <h3 className="text-xl font-semibold mb-4">Nearby Incidents</h3>
+      {/* Nearby Incidents Section */}
+      <div>
+        <h3 className="text-xl font-semibold text-gray-900 mb-6">Nearby Incidents</h3>
         <div className="space-y-4">
           {sortedIncidents.map((incident) => (
-            <div key={incident._id} className="bg-white p-4 rounded-lg shadow-md">
-              {/* Description (inline editing) */}
-              {editingIncidentId === incident._id ? (
-                <div className="flex items-center space-x-2">
-                  <textarea
-                    value={editedDescription}
-                    onChange={(e) => setEditedDescription(e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    rows="2"
-                  />
+            <div key={incident._id} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+              {/* Incident Content */}
+              <div className="flex items-start space-x-4">
+                {/* Voting Section */}
+                <div className="flex flex-col items-center space-y-2">
                   <button
-                    onClick={() => saveEdit(incident._id)}
-                    className="bg-green-500 text-white px-3 py-1 rounded-md"
+                    onClick={() => handleVote(incident._id, "upvote")}
+                    className="p-1 hover:bg-gray-100 rounded transition-colors"
                   >
-                    Save
+                    <svg className="w-6 h-6 text-gray-500" fill="none" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                      <path d="M5 15l7-7 7 7" />
+                    </svg>
+                  </button>
+                  <span className="text-sm font-medium text-gray-700">
+                    {(incident.upvoteCount || 0) - (incident.downvoteCount || 0)}
+                  </span>
+                  <button
+                    onClick={() => handleVote(incident._id, "downvote")}
+                    className="p-1 hover:bg-gray-100 rounded transition-colors"
+                  >
+                    <svg className="w-6 h-6 text-gray-500" fill="none" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                      <path d="M19 9l-7 7-7-7" />
+                    </svg>
                   </button>
                 </div>
-              ) : (
-                <p className="text-gray-700">{incident.description}</p>
-              )}
 
-              {/* Place Name */}
-              <p className="text-sm text-gray-500">
-                Location: {incident.location.placeName}
-              </p>
-
-              {/* Images */}
-              <div className="mt-2">
-                {incident.images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={`http://localhost:5000/${image}`}
-                    alt={`Incident ${index}`}
-                    className="w-24 h-24 object-cover mr-2"
-                  />
-                ))}
-              </div>
-
-              {/* Voting Buttons */}
-              <div className="mt-4 flex space-x-2">
-                <button
-                  onClick={() => handleVote(incident._id, "upvote")}
-                  className="bg-green-500 text-white px-3 py-1 rounded-md"
-                >
-                  Upvote ({incident.upvoteCount || 0})
-                </button>
-                <button
-                  onClick={() => handleVote(incident._id, "downvote")}
-                  className="bg-red-500 text-white px-3 py-1 rounded-md"
-                >
-                  Downvote ({incident.downvoteCount || 0})
-                </button>
-              </div>
-
-              {/* Edit/Delete Buttons (for owner) */}
-              {user && user.id === incident.userId && (
-                <div className="mt-4 flex space-x-2">
-                  <button
-                    onClick={() => handleEdit(incident._id, incident.description)}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded-md"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => deleteIncident(incident._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded-md"
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
-
-              {/* Comments Section */}
-              <div className="mt-4">
-                <button
-                  onClick={() => toggleComments(incident._id)}
-                  className="bg-blue-500 text-white px-3 py-1 rounded-md"
-                >
-                  {visibleComments[incident._id] ? "Hide Comments" : "Show Comments"}
-                </button>
-
-                {visibleComments[incident._id] && (
-                  <div className="mt-2">
-                    {/* Add Comment Input */}
-                    <div className="flex items-center space-x-2 mt-2">
-                      <input
-                        type="text"
-                        placeholder="Add a comment..."
-                        className="w-full p-2 border rounded-md"
-                        onKeyPress={(e) => {
-                          if (e.key === "Enter" && e.target.value.trim()) {
-                            handleComment(incident._id, e.target.value);
-                            e.target.value = ""; // Clear input after submitting
-                          }
-                        }}
+                {/* Main Content */}
+                <div className="flex-1">
+                  {editingIncidentId === incident._id ? (
+                    <div className="space-y-2">
+                      <textarea
+                        value={editedDescription}
+                        onChange={(e) => setEditedDescription(e.target.value)}
+                        className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        rows="2"
                       />
+                      <button
+                        onClick={() => saveEdit(incident._id)}
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                      >
+                        Save
+                      </button>
                     </div>
+                  ) : (
+                    <p className="text-gray-900 mb-2">{incident.description}</p>
+                  )}
 
-                    {/* Display Comments */}
-                    <div className="mt-2 space-y-2">
-                      {incident.comments.map((comment, index) => (
-                        <div key={index} className="bg-gray-50 p-2 rounded-md">
-                          {editingCommentId === comment._id ? (
-                            <div className="flex items-center space-x-2">
-                              <textarea
-                                value={editedCommentText}
-                                onChange={(e) => setEditedCommentText(e.target.value)}
-                                className="w-full p-2 border rounded-md"
-                                rows="2"
-                              />
-                              <button
-                                onClick={() => saveEditedComment(incident._id, comment._id)}
-                                className="bg-green-500 text-white px-3 py-1 rounded-md"
-                              >
-                                Save
-                              </button>
-                            </div>
-                          ) : (
-                            <p className="text-sm text-gray-700">{comment.comment}</p>
-                          )}
-                          <p className="text-xs text-gray-500">
-                            By User {comment.userId} at {new Date(comment.timestamp).toLocaleString()}
-                          </p>
-                          {user && user.id === comment.userId && (
-                            <div className="mt-2 flex space-x-2">
-                              <button
-                                onClick={() => handleEditComment(comment._id, comment.comment)}
-                                className="bg-yellow-500 text-white px-3 py-1 rounded-md"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => handleDeleteComment(incident._id, comment._id)}
-                                className="bg-red-500 text-white px-3 py-1 rounded-md"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          )}
-                        </div>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Location: {incident.location.placeName}
+                  </p>
+
+                  {/* Images Grid */}
+                  {incident.images.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2 mb-4">
+                      {incident.images.map((image, index) => (
+                        <img
+                          key={index}
+                          src={`http://localhost:5000/${image}`}
+                          alt={`Incident ${index}`}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
                       ))}
                     </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center space-x-4 text-sm">
+                    <button
+                      onClick={() => toggleComments(incident._id)}
+                      className="text-gray-500 hover:text-gray-700 transition-colors"
+                    >
+                      {visibleComments[incident._id] ? "Hide Comments" : "Show Comments"}
+                    </button>
+                    {user && user.id === incident.userId && (
+                      <>
+                        <button
+                          onClick={() => handleEdit(incident._id, incident.description)}
+                          className="text-gray-500 hover:text-gray-700 transition-colors"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => deleteIncident(incident._id)}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </div>
-                )}
+
+                  {/* Comments Section */}
+                  {visibleComments[incident._id] && (
+                    <div className="mt-4 pl-4 border-l-2 border-gray-100">
+                      {/* Add Comment */}
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          placeholder="Add a comment..."
+                          className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter" && e.target.value.trim()) {
+                              handleComment(incident._id, e.target.value);
+                              e.target.value = "";
+                            }
+                          }}
+                        />
+                      </div>
+
+                      {/* Comments List */}
+                      <div className="space-y-3">
+                        {incident.comments.map((comment, index) => (
+                          <div key={index} className="bg-gray-50 rounded-lg p-3">
+                            {editingCommentId === comment._id ? (
+                              <div className="space-y-2">
+                                <textarea
+                                  value={editedCommentText}
+                                  onChange={(e) => setEditedCommentText(e.target.value)}
+                                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                  rows="2"
+                                />
+                                <button
+                                  onClick={() => saveEditedComment(incident._id, comment._id)}
+                                  className="px-3 py-1 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                                >
+                                  Save
+                                </button>
+                              </div>
+                            ) : (
+                              <>
+                                <p className="text-sm text-gray-900">{comment.comment}</p>
+                                <div className="mt-2 flex items-center justify-between">
+                                  <p className="text-xs text-gray-500">
+                                    By User {comment.userId} • {new Date(comment.timestamp).toLocaleString()}
+                                  </p>
+                                  {user && user.id === comment.userId && (
+                                    <div className="flex items-center space-x-2">
+                                      <button
+                                        onClick={() => handleEditComment(comment._id, comment.comment)}
+                                        className="text-xs text-gray-500 hover:text-gray-700"
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        onClick={() => handleDeleteComment(incident._id, comment._id)}
+                                        className="text-xs text-red-500 hover:text-red-700"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
