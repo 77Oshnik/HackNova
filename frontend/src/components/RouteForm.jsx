@@ -16,7 +16,7 @@ const RouteForm = ({ onSubmit, isLoading }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
+      {/* <div>
         <Input
           type="text"
           placeholder="Starting point"
@@ -33,7 +33,7 @@ const RouteForm = ({ onSubmit, isLoading }) => {
           onChange={(e) => setDestination(e.target.value)}
           className="route-input"
         />
-      </div>
+      </div> */}
       <Button
         type="submit"
         disabled={!source || !destination || isLoading}

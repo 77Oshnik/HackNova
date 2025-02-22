@@ -13,19 +13,19 @@ import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useUser } from "@clerk/clerk-react"; // Import Clerk authentication
+import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from 'react-router-dom'; // Changed to react-router
 import axios from "axios";
 
 const AddTripDrawer = ({ open, onClose }) => {
-  const { user } = useUser(); // Get logged-in user details
+  const { user } = useUser();
+  const navigate = useNavigate(); // Use navigate instead of router
   const [date, setDate] = useState();
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
   const [loading, setLoading] = useState(true);
-  const[error,setError]=useState("")
+  const [error, setError] = useState("");
   const [trips, setTrips] = useState([]);
-
-
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -35,18 +35,13 @@ const AddTripDrawer = ({ open, onClose }) => {
       }
 
       try {
-        // Ensure proper URL string template syntax
-        console.log(user.id);
-        
         const response = await axios.get(`http://localhost:5000/api/fetchtrip/${user.id}`);
-        console.log(response.data)
         setTrips(response.data);
         setError(null);
       } catch (error) {
         console.error("Error fetching trips:", error);
         setError(error.message);
         
-        // If it's a 404, set empty trips array instead of keeping stale data
         if (error.response?.status === 404) {
           setTrips([]);
         }
@@ -66,33 +61,16 @@ const AddTripDrawer = ({ open, onClose }) => {
     }
 
     if (date && source && destination) {
-      const formattedDate = format(date, "yyyy-MM-dd"); // Format date for API
-      const userId = user.id; // Get user ID from Clerk
-        console.log(userId);
-        
-      const apiUrl = `http://localhost:5000/api/analyzeArea/${userId}/${source}/${destination}/${formattedDate}`;
+      const formattedDate = format(date, "yyyy-MM-dd");
+      
+      // Navigate to the Map component with search params
+      navigate(`/map?source=${encodeURIComponent(source)}&destination=${encodeURIComponent(destination)}&date=${formattedDate}`);
 
-      try {
-        const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch trip analysis");
-        }
-
-        const data = await response.json();
-        console.log("Trip Analysis Data:", data);
-
-        // Clear inputs
-        setDate(undefined);
-        setSource("");
-        setDestination("");
-        onClose();
-      } catch (error) {
-        console.error("Error fetching trip analysis:", error);
-      }
+      // Clear inputs and close drawer
+      setDate(undefined);
+      setSource("");
+      setDestination("");
+      onClose();
     }
   };
 
@@ -144,7 +122,7 @@ const AddTripDrawer = ({ open, onClose }) => {
             </div>
             <DrawerFooter className="px-0">
               <Button type="submit" className="w-full h-14 text-xl font-semibold">
-                Add Trip
+                View Route
               </Button>
             </DrawerFooter>
           </form>
