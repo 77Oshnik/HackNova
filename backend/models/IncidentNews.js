@@ -12,6 +12,7 @@ const IncidentNewsSchema = new mongoose.Schema({
   location: {
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
+    placeName: { type: String, default: "Unknown Location" },
   },
   votes: [
     {

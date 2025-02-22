@@ -1,24 +1,45 @@
 const Incident = require("../models/IncidentNews");
+const geocoder = require("../utils/geocoder");
 
 // Create a new incident
 exports.createIncident = async (req, res) => {
-  try {
-    const { userId, description, latitude, longitude } = req.body;
-    const images = req.files ? req.files.map(file => file.path) : []; // If using multer for local storage
-
-    const newIncident = new Incident({
-      userId,
-      description,
-      location: { latitude, longitude },
-      images,
-    });
-
-    await newIncident.save();
-    res.status(201).json({ message: "Incident reported successfully", newIncident });
-  } catch (error) {
-    res.status(500).json({ error: "Error reporting incident" });
-  }
-};
+    try {
+      const { userId, description, latitude, longitude } = req.body;
+      const images = req.files ? req.files.map((file) => file.path) : [];
+  
+      console.log("Request Body:", req.body); // Log the request body
+      console.log("Uploaded Files:", req.files); // Log the uploaded files
+  
+      // Validate required fields
+      if (!userId || !description || !latitude || !longitude) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+  
+      // Reverse geocode coordinates to get place name
+      let placeName = "Unknown Location";
+      try {
+        const geoResponse = await geocoder.reverse({ lat: latitude, lon: longitude });
+        placeName = geoResponse[0]?.formattedAddress || "Unknown Location";
+      } catch (geocodingError) {
+        console.error("Geocoding error:", geocodingError);
+      }
+  
+      console.log("Place Name:", placeName); // Log the place name
+  
+      const newIncident = new Incident({
+        userId,
+        description,
+        location: { latitude, longitude, placeName }, // Include placeName
+        images,
+      });
+  
+      await newIncident.save();
+      res.status(201).json({ message: "Incident reported successfully", newIncident });
+    } catch (error) {
+      console.error("Error reporting incident:", error); // Log the full error
+      res.status(500).json({ error: "Error reporting incident" });
+    }
+  };
 
 // Get incidents near a user's location
 exports.getNearbyIncidents = async (req, res) => {
@@ -105,5 +126,124 @@ exports.commentOnIncident = async (req, res) => {
     res.status(200).json({ message: "Comment added", incident });
   } catch (error) {
     res.status(500).json({ error: "Error adding comment" });
+  }
+};
+
+// Delete an incident
+exports.deleteIncident = async (req, res) => {
+    try {
+      const { userId } = req.body; // User ID from the request body
+      const { incidentId } = req.params; // Incident ID from the URL
+  
+      // Find the incident
+      const incident = await Incident.findById(incidentId);
+      if (!incident) {
+        return res.status(404).json({ error: "Incident not found" });
+      }
+  
+      // Check if the user is the owner of the incident
+      if (incident.userId !== userId) {
+        return res.status(403).json({ error: "You are not authorized to delete this incident" });
+      }
+  
+      // Delete the incident
+      await Incident.findByIdAndDelete(incidentId);
+      res.status(200).json({ message: "Incident deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting incident:", error);
+      res.status(500).json({ error: "Error deleting incident" });
+    }
+  };
+
+  // Edit an incident
+exports.editIncident = async (req, res) => {
+    try {
+      const { userId, description } = req.body; // User ID and new description from the request body
+      const { incidentId } = req.params; // Incident ID from the URL
+  
+      // Find the incident
+      const incident = await Incident.findById(incidentId);
+      if (!incident) {
+        return res.status(404).json({ error: "Incident not found" });
+      }
+  
+      // Check if the user is the owner of the incident
+      if (incident.userId !== userId) {
+        return res.status(403).json({ error: "You are not authorized to edit this incident" });
+      }
+  
+      // Update the description
+      incident.description = description;
+      await incident.save();
+  
+      res.status(200).json({ message: "Incident updated successfully", incident });
+    } catch (error) {
+      console.error("Error updating incident:", error);
+      res.status(500).json({ error: "Error updating incident" });
+    }
+  };
+
+  // Edit a comment
+// Edit a comment
+exports.editComment = async (req, res) => {
+    try {
+      const { userId, newComment } = req.body;
+      const { incidentId, commentId } = req.params;
+  
+      const incident = await Incident.findById(incidentId);
+      if (!incident) {
+        return res.status(404).json({ error: "Incident not found" });
+      }
+  
+      const comment = incident.comments.id(commentId);
+      if (!comment) {
+        return res.status(404).json({ error: "Comment not found" });
+      }
+  
+      // Check if the user is the owner of the comment
+      if (comment.userId !== userId) {
+        return res.status(403).json({ error: "You are not authorized to edit this comment" });
+      }
+  
+      // Update the comment
+      comment.comment = newComment;
+      await incident.save();
+  
+      res.status(200).json({ message: "Comment updated successfully", incident });
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      res.status(500).json({ error: "Error updating comment" });
+    }
+  };
+  
+  // Delete a comment
+  exports.deleteComment = async (req, res) => {
+  try {
+    const { userId } = req.query; // Get userId from query parameters
+    const { incidentId, commentId } = req.params;
+
+    const incident = await Incident.findById(incidentId);
+    if (!incident) {
+      return res.status(404).json({ error: "Incident not found" });
+    }
+
+    const comment = incident.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    // Check if the user is the owner of the comment
+    if (comment.userId !== userId) {
+      return res.status(403).json({ error: "You are not authorized to delete this comment" });
+    }
+
+    // Remove the comment
+    incident.comments.pull(commentId);
+    await incident.save();
+
+    res.status(200).json({ message: "Comment deleted successfully", incident });
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    res.status(500).json({ error: "Error deleting comment" });
   }
 };

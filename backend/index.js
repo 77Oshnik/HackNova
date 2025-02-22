@@ -9,7 +9,7 @@ const analyzeAreaRoute = require("./routes/analyzeAreaRoute");
 const { travelInfoController } = require('./controllers/travelInfoController');
 const forecastRoutes = require('./routes/forecastRoutes');
 const tweetRoutes = require('./routes/tweetRoute');
-const incidentRoutes = require('./routes/incidentRoutes');
+const incidentRoutes = require('./routes/incidents');
 const app = express();
  
 // Connect Database
