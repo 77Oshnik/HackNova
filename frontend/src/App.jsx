@@ -13,6 +13,7 @@ import Chatbot from "./components/Chatbot";
 import TravelForecast from "./components/TravelForecast";
 import ChatAssistant from "./components/ChatAssistant";
 import SafetyPathfinder from "./components/SafetyPathfinder";
+import TimelineCalculator from "./components/TimeLineCalculator";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="forecast" element={<TravelForecast />} />
             <Route path="assistant" element={<ChatAssistant />} />
             <Route path="bc" element={<SafetyPathfinder />} />
+            <Route path="line" element={<TimelineCalculator />} />
            </Route>
         </Routes>
       </Layout>
