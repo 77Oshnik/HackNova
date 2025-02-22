@@ -16,7 +16,7 @@ const Chatbot = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   const formatMessage = (content) => {
-    // Replace **text** with <strong>text</strong> for bold formatting
+    // Remove special characters like ** and replace them with proper formatting
     return content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
   };
 
@@ -70,31 +70,31 @@ const Chatbot = () => {
       <Card className="w-4/5 mx-auto flex flex-col bg-transparent border-none shadow-none h-full">
         {/* Card Header */}
         <CardHeader className="border-b border-neutral-700">
-          <h2 className="text-2xl font-bold text-white">Travel Information Chatbot</h2>
-          <p className="text-sm text-neutral-400">
+          <h2 className="text-2xl z-50 font-bold text-white">Travel Information Chatbot</h2>
+          <p className="text-sm z-50 text-neutral-400">
             Ask me anything about travel destinations!
           </p>
         </CardHeader>
 
         {/* Card Content (Chat Messages) */}
-        <CardContent className="flex-grow overflow-y-auto p-4" style={{ maxHeight: "calc(100vh - 200px)" }}>
-          <div className="h-full">
+        <CardContent className="flex-grow overflow-y-auto z-50 p-4" style={{ maxHeight: "calc(100vh - 200px)" }}>
+          <div className="h-full space-y-4">
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`mb-4 ${
-                  message.type === "user" ? "text-right" : "text-left"
+                className={`flex ${
+                  message.type === "user" ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
-                  className={`inline-block p-3 rounded-lg ${
+                  className={`max-w-[80%] p-3 rounded-lg ${
                     message.type === "user"
                       ? "bg-primary text-primary-foreground"
-                      : "bg-neutral-800 text-white"
+                      : "bg-neutral-000 text-white"
                   }`}
                 >
                   <p
-                    className="text-sm whitespace-pre-wrap"
+                    className="text-sm whitespace-pre-wrap select-text" // Allow text selection
                     dangerouslySetInnerHTML={{ __html: message.content }} // Render HTML content
                   ></p>
                 </div>
