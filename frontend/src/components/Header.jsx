@@ -9,29 +9,29 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center p-4">
         {/* Logo */}
         <Link to="/" className="text-2xl font-semibold text-gray-800">
-          HackNova  
+          MARG-RAKSHAK  
         </Link>
 
         {/* Navigation Links */}
         <div className="flex items-center gap-6">
           
-        <Link to="/line" className="text-gray-700 hover:text-gray-900 text-lg">
+        {/* <Link to="/line" className="text-gray-700 hover:text-gray-900 text-lg">
             Chatbot
-          </Link>
+          </Link> */}
 
-        <Link to="/tweet" className="text-gray-700 hover:text-gray-900 text-lg">
+        {/* <Link to="/tweet" className="text-gray-700 hover:text-gray-900 text-lg">
             Tweet
-          </Link>
+          </Link> */}
 
-        <Link to="/best" className="text-gray-700 hover:text-gray-900 text-lg">
+        {/* <Link to="/best" className="text-gray-700 hover:text-gray-900 text-lg">
             Best
-          </Link>
+          </Link> */}
 
           <Link to="/trip" className="text-gray-700 hover:text-gray-900 text-lg">
             Dashboard
           </Link>
-          <Link to="/map" className="text-gray-700 hover:text-gray-900 text-lg">
-            Map
+          <Link to="/line" className="text-gray-700 hover:text-gray-900 text-lg">
+            Stay
           </Link>
 
           <Link to="/forecast" className="text-gray-700 hover:text-gray-900 text-lg">
