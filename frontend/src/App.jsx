@@ -13,6 +13,7 @@ import Chatbot from "./components/Chatbot";
 import TravelForecast from "./components/TravelForecast";
 import ChatAssistant from "./components/ChatAssistant";
 import SafetyPathfinder from "./components/SafetyPathfinder";
+import TweetFeed from "./components/TweetFeed";
 import TimelineCalculator from "./components/TimeLineCalculator";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="dashboard" element={<DashBoard />} />
             <Route path="trip" element={<Trip/>}/>
             <Route path="map" element={<Map/>}/>
+            <Route path="tweet" element={<TweetFeed/>} />
             <Route path="best" element={<TravelScoreChart />} />
             <Route path="bot" element={<Chatbot />} />
             <Route path="forecast" element={<TravelForecast />} />

@@ -19,6 +19,10 @@ const Header = () => {
             Chatbot
           </Link>
 
+        <Link to="/tweet" className="text-gray-700 hover:text-gray-900 text-lg">
+            Tweet
+          </Link>
+
         <Link to="/best" className="text-gray-700 hover:text-gray-900 text-lg">
             Best
           </Link>

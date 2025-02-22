@@ -8,7 +8,7 @@ const connectDB = require("./config/database");
 const analyzeAreaRoute = require("./routes/analyzeAreaRoute");
 const { travelInfoController } = require('./controllers/travelInfoController');
 const forecastRoutes = require('./routes/forecastRoutes');
-
+const tweetRoutes = require('./routes/tweetRoute');
 const app = express();
  
 // Connect Database
@@ -22,13 +22,15 @@ app.use(cors({
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
 }));
+app.use('/uploads', express.static('uploads'));
+
 // app.use(morgan("dev"));
 
 // Routes
 app.use("/api",analyzeAreaRoute);
 app.use("/api/travelInfo",travelInfoController);
 app.use('/api/forecast', forecastRoutes);
-
+app.use('/api', tweetRoutes);
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
