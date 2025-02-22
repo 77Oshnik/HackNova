@@ -15,6 +15,8 @@ import ChatAssistant from "./components/ChatAssistant";
 import SafetyPathfinder from "./components/SafetyPathfinder";
 import TweetFeed from "./components/TweetFeed";
 import TimelineCalculator from "./components/TimeLineCalculator";
+import ReportIncident from "./components/ReportIncident";
+
 
 function App() {
   return (
@@ -39,6 +41,7 @@ function App() {
             <Route path="assistant" element={<ChatAssistant />} />
             <Route path="bc" element={<SafetyPathfinder />} />
             <Route path="line" element={<TimelineCalculator />} />
+            <Route path="report" element={<ReportIncident />} />
            </Route>
         </Routes>
       </Layout>

@@ -23,12 +23,13 @@ const Header = () => {
             Tweet
           </Link> */}
 
-        {/* <Link to="/best" className="text-gray-700 hover:text-gray-900 text-lg">
-            Best
-          </Link> */}
+        
 
           <Link to="/trip" className="text-gray-700 hover:text-gray-900 text-lg">
             Dashboard
+          </Link>
+          <Link to="/report" className="text-gray-700 hover:text-gray-900 text-lg">
+            Community
           </Link>
           <Link to="/line" className="text-gray-700 hover:text-gray-900 text-lg">
             Stay

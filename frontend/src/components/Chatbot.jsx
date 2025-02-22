@@ -13,6 +13,11 @@ const Chatbot = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
+  const formatMessage = (content) => {
+    // Replace **text** with <strong>text</strong> for bold formatting
+    return content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!query.trim()) return;
@@ -34,7 +39,8 @@ const Chatbot = () => {
       }
 
       const data = await res.json();
-      setMessages((prev) => [...prev, { type: "bot", content: data.information }]);
+      const formattedContent = formatMessage(data.information); // Format the response
+      setMessages((prev) => [...prev, { type: "bot", content: formattedContent }]);
     } catch (error) {
       console.error("Error fetching response:", error);
       setMessages((prev) => [...prev, { type: "bot", content: "An error occurred while fetching the response." }]);
@@ -81,7 +87,10 @@ const Chatbot = () => {
                       : "bg-muted"
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  <p
+                    className="text-sm whitespace-pre-wrap"
+                    dangerouslySetInnerHTML={{ __html: message.content }} // Render HTML content
+                  ></p>
                 </div>
               </div>
             ))}
