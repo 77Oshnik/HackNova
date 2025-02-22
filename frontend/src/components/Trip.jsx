@@ -3,6 +3,7 @@ import TripCard from "@/components/TripCard";
 import AddTripDrawer from "@/components/AddTripDrawer";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
+import ChatAssistant from "./ChatAssistant";
 
 const Trip = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -49,6 +50,7 @@ const Trip = () => {
 
   return (
     <div className="min-h-screen bg-gray-50/50">
+      <ChatAssistant />
       <div className="container mx-auto py-16 px-6">
         <div className="space-y-10">
           <div>

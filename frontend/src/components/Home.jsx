@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import WorldMapDemo from "@/components/WorldMapDemo";
 import { Shield, Navigation, Users, Cloud, Map } from "lucide-react";
 import { Link } from "react-router-dom"; // Use `next/link` if using Next.js
+import ChatAssistant from "./ChatAssistant";
 
 const Home = () => {
   const dots = [
@@ -47,6 +48,7 @@ const Home = () => {
 
   return (
     <div className="relative min-h-screen">
+      <ChatAssistant />
       {/* Full-screen map background */}
       <div className="fixed inset-0 z-0 pt-12">
         <WorldMapDemo dots={dots} lineColor="#3b82f6" />
@@ -114,15 +116,6 @@ const Home = () => {
             </div>
           </div>
         </footer>
-      </div>
-
-      {/* Fixed Button in Bottom Right Corner */}
-      <div className="fixed bottom-8 right-8 z-50">
-        <Link to="/bot"> {/* Use `href="/bot"` if using Next.js */}
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-            AI Tour Guide
-          </Button>
-        </Link>
       </div>
     </div>
   );
