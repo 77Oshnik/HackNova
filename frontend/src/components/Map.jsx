@@ -16,17 +16,15 @@ const Map = () => {
   const [routingControl, setRoutingControl] = useState(null);
 
   const getRouteColor = (safetyScore) => {
-    if (safetyScore >= 80) return '#22c55e'; // Green for very safe
-    if (safetyScore >= 60) return '#84cc16'; // Light green for safe
-    if (safetyScore >= 40) return '#eab308'; // Yellow for moderate
-    if (safetyScore >= 20) return '#f97316'; // Orange for unsafe
-    return '#ef4444'; // Red for very unsafe
+    if (safetyScore >= 80) return '#22c55e';
+    if (safetyScore >= 60) return '#84cc16';
+    if (safetyScore >= 40) return '#eab308';
+    if (safetyScore >= 20) return '#f97316';
+    return '#ef4444';
   };
 
-  // Mock function to calculate safety score - replace with your actual safety calculation
   const calculateSafetyScore = (route) => {
-    // This is a placeholder - implement your actual safety scoring logic
-    const baseScore = Math.floor(Math.random() * (95 - 30 + 1)) + 30; // Random score between 30-95
+    const baseScore = Math.floor(Math.random() * (95 - 30 + 1)) + 30;
     return baseScore;
   };
 
@@ -51,47 +49,113 @@ const Map = () => {
     }
   };
 
+  // Generate additional waypoints around the direct route
+  const generateWaypoints = (start, end) => {
+    const waypoints = [];
+    const directLat = (end.lat - start.lat) / 2;
+    const directLng = (end.lng - start.lng) / 2;
+    
+    // Generate 4 offset points for different routes
+    const offsets = [
+      { lat: 0.01, lng: 0.01 },
+      { lat: -0.01, lng: -0.01 },
+      { lat: 0.01, lng: -0.01 },
+      { lat: -0.01, lng: 0.01 }
+    ];
+
+    offsets.forEach(offset => {
+      const midPoint = L.latLng(
+        start.lat + directLat + offset.lat,
+        start.lng + directLng + offset.lng
+      );
+      waypoints.push([start, midPoint, end]);
+    });
+
+    // Add the direct route
+    waypoints.push([start, end]);
+
+    return waypoints;
+  };
+
+  const calculateSingleRoute = (waypoints) => {
+    return new Promise((resolve) => {
+      const control = L.Routing.control({
+        waypoints: waypoints,
+        routeWhileDragging: false,
+        showAlternatives: true,
+        createMarker: function() { return null; },
+        addWaypoints: false,
+        fitSelectedRoutes: false
+      });
+
+      control.on('routesfound', (e) => {
+        resolve(e.routes[0]); // Get the first (best) route for these waypoints
+      });
+
+      control.addTo(map);
+      setTimeout(() => {
+        map.removeControl(control);
+      }, 1000);
+    });
+  };
+
   const calculateRoutes = async (startCoords, endCoords) => {
     if (routingControl) {
       map.removeControl(routingControl);
     }
 
-    return new Promise((resolve) => {
-      const control = L.Routing.control({
+    const waypointSets = generateWaypoints(startCoords, endCoords);
+    const routePromises = waypointSets.map(waypoints => calculateSingleRoute(waypoints));
+
+    try {
+      const calculatedRoutes = await Promise.all(routePromises);
+      
+      const processedRoutes = calculatedRoutes.map((route, index) => {
+        const safetyScore = calculateSafetyScore(route);
+        return {
+          id: index,
+          coordinates: route.coordinates,
+          distance: route.summary.totalDistance,
+          time: route.summary.totalTime,
+          safetyScore: safetyScore,
+          color: getRouteColor(safetyScore),
+          instructions: route.instructions
+        };
+      });
+
+      // Sort routes by safety score
+      processedRoutes.sort((a, b) => b.safetyScore - a.safetyScore);
+      
+      // Create a single routing control for display
+      const mainControl = L.Routing.control({
         waypoints: [startCoords, endCoords],
         routeWhileDragging: false,
         showAlternatives: true,
-        createMarker: function() { return null; }, // Hide default markers
+        createMarker: function() { return null; },
+        addWaypoints: false,
+        lineOptions: {
+          styles: processedRoutes.map(route => ({
+            color: route.color,
+            opacity: 0.8,
+            weight: 5
+          }))
+        }
       });
 
-      control.on('routesfound', (e) => {
-        const processedRoutes = e.routes.map((route, index) => {
-          const safetyScore = calculateSafetyScore(route);
-          return {
-            id: index,
-            coordinates: route.coordinates,
-            distance: route.summary.totalDistance,
-            time: route.summary.totalTime,
-            safetyScore: safetyScore,
-            color: getRouteColor(safetyScore),
-            instructions: route.instructions
-          };
-        });
-        
-        // Sort routes by safety score
-        processedRoutes.sort((a, b) => b.safetyScore - a.safetyScore);
-        resolve(processedRoutes);
-      });
+      mainControl.addTo(map);
+      setRoutingControl(mainControl);
 
-      control.addTo(map);
-      setRoutingControl(control);
-    });
+      return processedRoutes;
+    } catch (error) {
+      console.error('Error calculating multiple routes:', error);
+      throw error;
+    }
   };
 
   useEffect(() => {
     const source = searchParams.get('source');
     const destination = searchParams.get('destination');
-    const date=searchParams.get('date')
+    const date = searchParams.get('date');
     
     if (source && destination && map) {
       handleRouteSubmit(source, destination);
@@ -115,7 +179,6 @@ const Map = () => {
       setRoutes(calculatedRoutes);
       setSelectedRouteId(calculatedRoutes[0]?.id || null);
 
-      // Fit the map bounds to show the entire route
       const bounds = L.latLngBounds([startCoords, endCoords]);
       map.fitBounds(bounds, { padding: [50, 50] });
 
@@ -153,13 +216,13 @@ const Map = () => {
         />
         {routes.length > 0 && (
           <RouteInfo
-          routes={routes}
-          selectedRouteId={selectedRouteId}
-          onRouteSelect={handleRouteSelect}
-          source={searchParams.get('source') || ''}
-          destination={searchParams.get('destination') || ''}
-          date={searchParams.get('date')}
-        />        
+            routes={routes}
+            selectedRouteId={selectedRouteId}
+            onRouteSelect={handleRouteSelect}
+            source={searchParams.get('source') || ''}
+            destination={searchParams.get('destination') || ''}
+            date={searchParams.get('date')}
+          />        
         )}
       </div>
     </div>
