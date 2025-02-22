@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2, Send, ArrowLeft } from "lucide-react"; // Import ArrowLeft icon
+import { ShootingStars } from "@/components/ui/shooting-stars";
+import { StarsBackground } from "@/components/ui/stars-background";
 
 const Chatbot = () => {
   const [query, setQuery] = useState("");
@@ -51,7 +53,11 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative h-screen bg-neutral-900 overflow-hidden">
+      {/* Shooting Stars and Stars Background */}
+      <ShootingStars />
+      <StarsBackground />
+
       {/* Back Button */}
       <Button
         className="fixed top-24 left-8 z-50 bg-[#c5c0c0] backdrop-blur-sm hover:bg-[#a8a1a1] text-gray-900 rounded-full p-2 shadow-lg"
@@ -61,17 +67,17 @@ const Chatbot = () => {
       </Button>
 
       {/* Chatbot Card */}
-      <Card className="w-4/5 mx-auto flex flex-col" style={{ height: "calc(100vh - 64px)" }}>
+      <Card className="w-4/5 mx-auto flex flex-col bg-transparent border-none shadow-none h-full">
         {/* Card Header */}
-        <CardHeader className="border-b">
-          <h2 className="text-2xl font-bold">Travel Information Chatbot</h2>
-          <p className="text-sm text-muted-foreground">
+        <CardHeader className="border-b border-neutral-700">
+          <h2 className="text-2xl font-bold text-white">Travel Information Chatbot</h2>
+          <p className="text-sm text-neutral-400">
             Ask me anything about travel destinations!
           </p>
         </CardHeader>
 
         {/* Card Content (Chat Messages) */}
-        <CardContent className="flex-grow overflow-y-auto p-4" style={{ maxHeight: "400px" }}>
+        <CardContent className="flex-grow overflow-y-auto p-4" style={{ maxHeight: "calc(100vh - 200px)" }}>
           <div className="h-full">
             {messages.map((message, index) => (
               <div
@@ -84,7 +90,7 @@ const Chatbot = () => {
                   className={`inline-block p-3 rounded-lg ${
                     message.type === "user"
                       ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
+                      : "bg-neutral-800 text-white"
                   }`}
                 >
                   <p
@@ -98,16 +104,20 @@ const Chatbot = () => {
         </CardContent>
 
         {/* Card Footer (Input Area) */}
-        <CardFooter className="border-t">
+        <CardFooter className="border-t border-neutral-700 p-4 fixed bottom-0 w-4/5 bg-neutral-900 z-50">
           <form onSubmit={handleSubmit} className="flex gap-2 w-full">
             <Input
               placeholder="Ask a question..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               disabled={loading}
-              className="flex-grow"
+              className="flex-grow bg-neutral-800 text-white border-neutral-700 h-12" // Increased height
             />
-            <Button type="submit" disabled={loading}>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="bg-neutral-800 text-white hover:bg-neutral-700 h-12 px-6" // Increased height and padding
+            >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
