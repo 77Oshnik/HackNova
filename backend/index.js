@@ -9,6 +9,7 @@ const analyzeAreaRoute = require("./routes/analyzeAreaRoute");
 const { travelInfoController } = require('./controllers/travelInfoController');
 const forecastRoutes = require('./routes/forecastRoutes');
 const tweetRoutes = require('./routes/tweetRoute');
+const incidentRoutes = require('./routes/incidentRoutes');
 const app = express();
  
 // Connect Database
@@ -31,6 +32,7 @@ app.use("/api",analyzeAreaRoute);
 app.use("/api/travelInfo",travelInfoController);
 app.use('/api/forecast', forecastRoutes);
 app.use('/api', tweetRoutes);
+app.use('/api/incidents', incidentRoutes);
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
